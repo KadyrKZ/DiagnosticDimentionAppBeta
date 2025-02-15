@@ -1,23 +1,21 @@
 // Coordinator.swift
-//
-//  Created by Қадыр Маратұлы on 27.02.2024.
-//
+// Copyright © KadyrKZ. All rights reserved.
 
 import UIKit
 
-/// Протокол координатора для всего проекта.
+/// Coordinator's protocol for the entire project.
 protocol Coordinator: AnyObject {
     var childCoordinators: [Coordinator] { get set }
     func start()
 }
 
 extension Coordinator {
-    /// Добавление дочернего координатора.
+    // Adding a child coordinator.
     func add(coordinator: Coordinator) {
         childCoordinators.append(coordinator)
     }
-    
-    /// Удаление дочернего координатора.
+
+    // Deleting a child coordinator.
     func remove(coordinator: Coordinator) {
         childCoordinators = childCoordinators.filter { $0 !== coordinator }
     }

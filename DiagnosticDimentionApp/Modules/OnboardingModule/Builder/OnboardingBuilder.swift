@@ -1,9 +1,5 @@
-//
-//  OnboardingBuilder.swift
-//  DiagnosticDimentionApp
-//
-//  Created by Kadyr Maratuly on 12.02.2025.
-//
+// OnboardingBuilder.swift
+// Copyright © KadyrKZ. All rights reserved.
 
 import UIKit
 
@@ -13,6 +9,6 @@ protocol OnboardingBuilderProtocol {
 
 final class OnboardingBuilder: OnboardingBuilderProtocol {
     func configureModule() -> UIViewController {
-        return OnboardingViewController()
+        OnboardingViewController()
     }
 }

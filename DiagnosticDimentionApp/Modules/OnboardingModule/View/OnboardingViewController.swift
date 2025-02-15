@@ -1,15 +1,33 @@
-//
-//  OnboardingViewController.swift
-//  DiagnosticDimentionApp
-//
-//  Created by [Ваше Имя] on 03.02.2025.
-//
+// OnboardingViewController.swift
+// Copyright © KadyrKZ. All rights reserved.
 
 import UIKit
 
-class OnboardingViewController: UIViewController {
+/// OnboardingConstants
+enum OnboardingConstants {
+    static let welcomeTitle = "Welcome to Cognitive Diagnostics"
+    static let descriptionText = """
+    This app is designed for diagnosing cognitive impairments,
+    such as Alzheimer's and Parkinson's disease.
+    You can record a video of your gait and get a preliminary result
+    expressed in percentage.
+    """
+    static let instructionsText = """
+    Instructions:
+    1. Tap "Record Video" to start recording.
+    2. Follow the recommendations (good lighting, proper camera angle).
+    3. Wait for the analysis results.
+    """
+    static let disclaimerText = """
+    Disclaimer: This app does not replace a doctor's consultation.
+    The results are preliminary and for informational purposes only.
+    """
+    static let continueButtonTitle = "Start"
+}
 
-    // MARK: - UI элементы
+/// OnboardingViewController
+class OnboardingViewController: UIViewController {
+    // MARK: - UI Elements
 
     private lazy var scrollView: UIScrollView = {
         let scroll = UIScrollView()
@@ -25,7 +43,7 @@ class OnboardingViewController: UIViewController {
 
     private lazy var titleLabel: UILabel = {
         let label = UILabel()
-        label.text = "Добро пожаловать в Cognitive Diagnostics"
+        label.text = OnboardingConstants.welcomeTitle
         label.font = UIFont.boldSystemFont(ofSize: 28)
         label.textAlignment = .center
         label.numberOfLines = 0
@@ -36,9 +54,7 @@ class OnboardingViewController: UIViewController {
 
     private lazy var descriptionLabel: UILabel = {
         let label = UILabel()
-        label.text = """
-        Это приложение предназначено для диагностики когнитивных нарушений, таких как Альцгеймер и Паркинсон. Вы сможете записать видео вашей походки и получить предварительный результат в виде процентного соотношения.
-        """
+        label.text = OnboardingConstants.descriptionText
         label.font = UIFont.systemFont(ofSize: 16)
         label.textAlignment = .left
         label.numberOfLines = 0
@@ -49,12 +65,7 @@ class OnboardingViewController: UIViewController {
 
     private lazy var instructionsLabel: UILabel = {
         let label = UILabel()
-        label.text = """
-        Инструкция:
-        1. Нажмите «Записать видео» для записи видео.
-        2. Следуйте рекомендациям (хорошее освещение, прямой угол камеры).
-        3. Дождитесь результатов анализа.
-        """
+        label.text = OnboardingConstants.instructionsText
         label.font = UIFont.systemFont(ofSize: 16)
         label.textAlignment = .left
         label.numberOfLines = 0
@@ -65,7 +76,7 @@ class OnboardingViewController: UIViewController {
 
     private lazy var disclaimerLabel: UILabel = {
         let label = UILabel()
-        label.text = "Внимание: данное приложение не заменяет консультацию врача. Результаты являются предварительными и носит информационный характер."
+        label.text = OnboardingConstants.disclaimerText
         label.font = UIFont.systemFont(ofSize: 12)
         label.textAlignment = .center
         label.numberOfLines = 0
@@ -76,7 +87,7 @@ class OnboardingViewController: UIViewController {
 
     private lazy var continueButton: UIButton = {
         let button = UIButton(type: .system)
-        button.setTitle("Начать", for: .normal)
+        button.setTitle(OnboardingConstants.continueButtonTitle, for: .normal)
         button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 18)
         button.backgroundColor = UIColor.systemBlue
         button.tintColor = UIColor.white
@@ -86,17 +97,17 @@ class OnboardingViewController: UIViewController {
         return button
     }()
 
-    // MARK: - Жизненный цикл
+    // MARK: - Life Cycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         modalPresentationStyle = .overFullScreen
         view.backgroundColor = UIColor(white: 1.0, alpha: 1.0)
         setupUI()
     }
 
-    // MARK: - Настройка UI
+    // MARK: - UI Setup
 
     private func setupUI() {
         view.addSubview(scrollView)
@@ -147,10 +158,10 @@ class OnboardingViewController: UIViewController {
         ])
     }
 
-    // MARK: - Действия
+    // MARK: - Actions
 
     @objc private func continueButtonTapped() {
         dismiss(animated: true, completion: nil)
-        print("Кнопка 'Начать' нажата. Закрываем окно онбординга.")
+        print("Continue button tapped. Dismissing onboarding screen.")
     }
 }

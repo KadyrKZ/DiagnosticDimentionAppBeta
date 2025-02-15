@@ -1,22 +1,21 @@
 // AppCoordinator.swift
-//
-//  Created by Қадыр Маратұлы on 27.02.2024.
-//
+// Copyright © KadyrKZ. All rights reserved.
 
 import UIKit
 
 final class AppCoordinator: BaseCoordinator {
     private let window: UIWindow
     private var mainCoordinator: MainCoordinator?
-    
+
     init(window: UIWindow) {
         self.window = window
         super.init()
     }
-    
+
     override func start() {
-        mainCoordinator = MainCoordinator(window: window)
-        add(coordinator: mainCoordinator!)
-        mainCoordinator?.start()
+        let mainCoordinator = MainCoordinator(window: window)
+        self.mainCoordinator = mainCoordinator
+        add(coordinator: mainCoordinator)
+        mainCoordinator.start()
     }
 }

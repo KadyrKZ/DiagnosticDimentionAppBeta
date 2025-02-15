@@ -1,11 +1,14 @@
-//
-//  TrainingViewController.swift
-//  DiagnosticDimentionApp
-//
-//  Created by Kadyr Maratuly on 13.02.2025.
-//
+// TrainingViewController.swift
+// Copyright © KadyrKZ. All rights reserved.
 
 import UIKit
+
+/// TrainingConstants
+enum TrainingConstants {
+    // Layout constants
+    static let collectionSpacing: CGFloat = 10
+    static let headerHeight: CGFloat = 40
+}
 
 protocol TrainingCoordinatorProtocol: AnyObject {
     func didSelectTraining(model: TrainingModel)
@@ -14,41 +17,48 @@ protocol TrainingCoordinatorProtocol: AnyObject {
 final class TrainingViewController: UIViewController {
     var viewModel: TrainingViewModel!
     weak var coordinator: TrainingCoordinatorProtocol?
-    
+
     private var collectionView: UICollectionView!
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .historyBackground
+        view.backgroundColor = .historyPage
         setupCollectionView()
     }
-    
+
     private func setupCollectionView() {
-        let spacing: CGFloat = 10
+        let spacing = TrainingConstants.collectionSpacing
         let layout = UICollectionViewFlowLayout()
         layout.minimumInteritemSpacing = spacing
         layout.minimumLineSpacing = spacing
-        
-        // Рассчитываем размер ячейки для 2 колонок
+
+        // Calculate cell size for 2 columns.
         let availableWidth = view.frame.width - spacing * 3
         let cellWidth = availableWidth / 2
         layout.itemSize = CGSize(width: cellWidth, height: cellWidth * 1.2)
-        
-        // Задаем размер заголовка секции
-        layout.headerReferenceSize = CGSize(width: view.frame.width, height: 40)
-        
+
+        // Set header size using constant.
+        layout.headerReferenceSize = CGSize(width: view.frame.width, height: TrainingConstants.headerHeight)
+
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.backgroundColor = .clear
         collectionView.dataSource = self
         collectionView.delegate = self
-        
-        // Регистрируем ячейку и заголовок секции
-        collectionView.register(TrainingCollectionViewCell.self, forCellWithReuseIdentifier: TrainingCollectionViewCell.reuseIdentifier)
-        collectionView.register(TrainingSectionHeaderView.self, forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader, withReuseIdentifier: TrainingSectionHeaderView.reuseIdentifier)
-        
+
+        // Register cell and header view.
+        collectionView.register(
+            TrainingCollectionViewCell.self,
+            forCellWithReuseIdentifier: TrainingCollectionViewCell.reuseIdentifier
+        )
+        collectionView.register(
+            TrainingSectionHeaderView.self,
+            forSupplementaryViewOfKind: UICollectionView.elementKindSectionHeader,
+            withReuseIdentifier: TrainingSectionHeaderView.reuseIdentifier
+        )
+
         view.addSubview(collectionView)
-        
+
         NSLayoutConstraint.activate([
             collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: spacing),
             collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: spacing),
@@ -60,26 +70,40 @@ final class TrainingViewController: UIViewController {
 
 extension TrainingViewController: UICollectionViewDataSource {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
-        return viewModel.trainingSections.count
+        viewModel.trainingSections.count
     }
-    
+
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return viewModel.trainingSections[section].items.count
+        viewModel.trainingSections[section].items.count
     }
-    
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: TrainingCollectionViewCell.reuseIdentifier, for: indexPath) as? TrainingCollectionViewCell else {
+
+    func collectionView(
+        _ collectionView: UICollectionView,
+        cellForItemAt indexPath: IndexPath
+    ) -> UICollectionViewCell {
+        guard let cell = collectionView.dequeueReusableCell(
+            withReuseIdentifier: TrainingCollectionViewCell.reuseIdentifier,
+            for: indexPath
+        ) as? TrainingCollectionViewCell else {
             return UICollectionViewCell()
         }
         let model = viewModel.trainingSections[indexPath.section].items[indexPath.item]
         cell.configure(with: model)
         return cell
     }
-    
-    // Заголовок секции
-    func collectionView(_ collectionView: UICollectionView, viewForSupplementaryElementOfKind kind: String, at indexPath: IndexPath) -> UICollectionReusableView {
+
+    // Section header.
+    func collectionView(
+        _ collectionView: UICollectionView,
+        viewForSupplementaryElementOfKind kind: String,
+        at indexPath: IndexPath
+    ) -> UICollectionReusableView {
         if kind == UICollectionView.elementKindSectionHeader {
-            guard let header = collectionView.dequeueReusableSupplementaryView(ofKind: kind, withReuseIdentifier: TrainingSectionHeaderView.reuseIdentifier, for: indexPath) as? TrainingSectionHeaderView else {
+            guard let header = collectionView.dequeueReusableSupplementaryView(
+                ofKind: kind,
+                withReuseIdentifier: TrainingSectionHeaderView.reuseIdentifier,
+                for: indexPath
+            ) as? TrainingSectionHeaderView else {
                 return UICollectionReusableView()
             }
             let sectionTitle = viewModel.trainingSections[indexPath.section].title

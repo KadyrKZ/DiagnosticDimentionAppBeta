@@ -1,9 +1,5 @@
-//
-//  MainCoordinator.swift
-//  DiagnosticDimentionApp
-//
-//  Created by Kadyr Maratuly on 11.02.2025.
-//
+// MainCoordinator.swift
+// Copyright © KadyrKZ. All rights reserved.
 
 import UIKit
 
@@ -17,7 +13,7 @@ final class MainCoordinator: BaseCoordinator {
 
     init(window: UIWindow) {
         self.window = window
-        self.tabBarController = UITabBarController()
+        tabBarController = UITabBarController()
         super.init()
     }
 
@@ -28,11 +24,15 @@ final class MainCoordinator: BaseCoordinator {
 
         let symbolConfig = UIImage.SymbolConfiguration(pointSize: 20, weight: .bold)
         let diagnosticImage = UIImage(systemName: "waveform.path.ecg", withConfiguration: symbolConfig)
-        diagnosticNavController.tabBarItem = UITabBarItem(title: "", image: diagnosticImage, selectedImage: diagnosticImage)
-        
+        diagnosticNavController.tabBarItem = UITabBarItem(
+            title: "",
+            image: diagnosticImage,
+            selectedImage: diagnosticImage
+        )
+
         let historyImage = UIImage(systemName: "clock", withConfiguration: symbolConfig)
         historyNavController.tabBarItem = UITabBarItem(title: "", image: historyImage, selectedImage: historyImage)
-        
+
         let trainingImage = UIImage(systemName: "figure.walk", withConfiguration: symbolConfig)
         trainingNavController.tabBarItem = UITabBarItem(title: "", image: trainingImage, selectedImage: trainingImage)
         tabBarController.tabBar.isTranslucent = true

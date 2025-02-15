@@ -1,15 +1,11 @@
-//
-//  TrainingSectionHeaderView.swift
-//  DiagnosticDimentionApp
-//
-//  Created by Kadyr Maratuly on 13.02.2025.
-//
+// TrainingSectionHeaderView.swift
+// Copyright © KadyrKZ. All rights reserved.
 
 import UIKit
 
 final class TrainingSectionHeaderView: UICollectionReusableView {
     static let reuseIdentifier = "TrainingSectionHeaderView"
-    
+
     private let titleLabel: UILabel = {
         let label = UILabel()
         label.font = UIFont(name: "InriaSans-Bold", size: 20)
@@ -17,7 +13,7 @@ final class TrainingSectionHeaderView: UICollectionReusableView {
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
-    
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         addSubview(titleLabel)
@@ -26,11 +22,12 @@ final class TrainingSectionHeaderView: UICollectionReusableView {
             titleLabel.centerYAnchor.constraint(equalTo: centerYAnchor)
         ])
     }
-    
+
+    @available(*, unavailable)
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
-    
+
     func configure(with title: String) {
         titleLabel.text = title
     }

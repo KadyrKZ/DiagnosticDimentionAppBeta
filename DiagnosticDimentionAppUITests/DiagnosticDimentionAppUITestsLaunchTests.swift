@@ -1,15 +1,10 @@
-//
-//  DiagnosticDimentionAppUITestsLaunchTests.swift
-//  DiagnosticDimentionAppUITests
-//
-//  Created by Kadyr Maratuly on 10.02.2025.
-//
+// DiagnosticDimentionAppUITestsLaunchTests.swift
+// Copyright © KadyrKZ. All rights reserved.
 
 import XCTest
 
 final class DiagnosticDimentionAppUITestsLaunchTests: XCTestCase {
-
-    override class var runsForEachTargetApplicationUIConfiguration: Bool {
+    override static var runsForEachTargetApplicationUIConfiguration: Bool {
         true
     }
 

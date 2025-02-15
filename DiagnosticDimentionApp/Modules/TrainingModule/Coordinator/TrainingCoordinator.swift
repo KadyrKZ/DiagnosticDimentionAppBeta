@@ -1,9 +1,5 @@
-//
-//  TrainingCoordinator.swift
-//  DiagnosticDimentionApp
-//
-//  Created by Kadyr Maratuly on 13.02.2025.
-//
+// TrainingCoordinator.swift
+// Copyright © KadyrKZ. All rights reserved.
 
 import UIKit
 
@@ -14,7 +10,7 @@ final class TrainingCoordinator: BaseCoordinator {
         self.navigationController = navigationController
         super.init()
     }
-    
+
     override func start() {
         let trainingVC = TrainingBuilder().configureModule()
         navigationController.viewControllers = [trainingVC]

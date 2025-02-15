@@ -1,31 +1,25 @@
-//
-//  CircularProgressViewModel.swift
-//  DetectionDemetia
-//
-//  Created by Қадыр Маратұлы on 04.02.2025.
-//
+// CircularProgressViewModel.swift
+// Copyright © KadyrKZ. All rights reserved.
 
 import UIKit
 
-/// ViewModel для CircularProgressView.
-/// Содержит данные о прогрессе и вычисляет цвет индикатора.
 final class CircularProgressViewModel {
     var progress: CGFloat = 0 {
         didSet {
-            // Можно добавить уведомление об изменении, если требуется
+            // Optionally notify about changes.
         }
     }
-    
+
     var strokeColor: UIColor {
         let percentage = progress * 100.0
         if percentage <= 30 {
-            return UIColor.green
+            return .green
         } else if percentage <= 55 {
-            return UIColor.systemYellow
+            return .systemYellow
         } else if percentage <= 80 {
-            return UIColor.orange
+            return .orange
         } else {
-            return UIColor.red
+            return .red
         }
     }
 }

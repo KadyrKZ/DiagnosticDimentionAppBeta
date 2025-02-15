@@ -1,12 +1,9 @@
-//
-//  Untitled.swift
-//  DiagnosticDimentionApp
-//
-//  Created by Kadyr Maratuly on 13.02.2025.
-//
+// TrainingModel.swift
+// Copyright © KadyrKZ. All rights reserved.
 
 import Foundation
 
+/// TrainingModel
 struct TrainingModel {
     let title: String
     let imageName: String

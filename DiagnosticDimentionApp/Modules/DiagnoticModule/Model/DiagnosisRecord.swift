@@ -1,5 +1,9 @@
+// DiagnosisRecord.swift
+// Copyright © KadyrKZ. All rights reserved.
+
 import Foundation
 
+/// DiagnosisRecord
 struct DiagnosisRecord {
     let patientName: String
     let date: Date

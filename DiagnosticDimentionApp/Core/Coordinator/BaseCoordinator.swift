@@ -1,14 +1,12 @@
 // BaseCoordinator.swift
-//
-//  Created by Қадыр Маратұлы on 27.02.2024.
-//
+// Copyright © KadyrKZ. All rights reserved.
 
 import UIKit
 
-/// Базовый класс координатора для наследования.
+/// The coordinator's base class for inheritance.
 class BaseCoordinator: Coordinator {
     var childCoordinators: [Coordinator] = []
-    
+
     func start() {
         fatalError("Child coordinators must implement start()")
     }

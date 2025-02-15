@@ -1,9 +1,5 @@
-//
-//  TrainingBuilder.swift
-//  DiagnosticDimentionApp
-//
-//  Created by Kadyr Maratuly on 13.02.2025.
-//
+// TrainingBuilder.swift
+// Copyright © KadyrKZ. All rights reserved.
 
 import UIKit
 

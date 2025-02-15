@@ -1,9 +1,5 @@
-//
-//  HistoryBuilder.swift
-//  DetectionDemetia
-//
-//  Created by Қадыр Маратұлы on 06.02.2025.
-//
+// HistoryBuilder.swift
+// Copyright © KadyrKZ. All rights reserved.
 
 import UIKit
 

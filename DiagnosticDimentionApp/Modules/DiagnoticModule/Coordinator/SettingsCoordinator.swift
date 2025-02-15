@@ -1,31 +1,27 @@
-//
-//  SettingsCoordinator.swift
-//  DiagnosticDimentionApp
-//
-//  Created by Kadyr Maratuly on 13.02.2025.
-//
+// SettingsCoordinator.swift
+// Copyright © KadyrKZ. All rights reserved.
 
 import UIKit
 
 final class SettingsCoordinator: BaseCoordinator, SettingsCoordinatorProtocol {
     private let navigationController: UINavigationController
-    
+
     init(navigationController: UINavigationController) {
         self.navigationController = navigationController
         super.init()
     }
-    
+
     override func start() {
         let settingsVC = SettingsViewController()
         settingsVC.coordinator = self
         settingsVC.modalPresentationStyle = .overFullScreen
-        // Презентуем его модально (или пушим, если хотите)
+        // Present the settings view controller modally (or push it if desired)
         navigationController.present(settingsVC, animated: true)
     }
-    
-    // Метод протокола SettingsCoordinatorProtocol
+
+    // SettingsCoordinatorProtocol method
     func didFinishSettings() {
-        // Закрываем настройки
+        // Dismiss the settings view controller
         navigationController.dismiss(animated: true, completion: nil)
     }
 }
