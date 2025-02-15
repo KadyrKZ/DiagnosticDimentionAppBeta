@@ -15,6 +15,9 @@ final class DiagnosticCoordinator: BaseCoordinator {
     override func start() {
         let diagnosticVC = DiagnosticBuilder().configureModule(coordinator: self)
         navigationController.viewControllers = [diagnosticVC]
+        if !UserDefaults.standard.bool(forKey: "hasShownOnboarding") {
+            showOnboarding()
+        }
     }
 
     func showResult(percentage: CGFloat, diagnosis: String) {
@@ -31,8 +34,10 @@ final class DiagnosticCoordinator: BaseCoordinator {
     func showOnboarding() {
         let onboardingVC = OnboardingBuilder().configureModule()
         onboardingVC.modalPresentationStyle = .overFullScreen
+        print("Presenting OnboardingViewController")
         DispatchQueue.main.async {
             self.navigationController.present(onboardingVC, animated: true) {
+                print("OnboardingViewController presented")
                 UserDefaults.standard.set(true, forKey: "hasShownOnboarding")
             }
         }

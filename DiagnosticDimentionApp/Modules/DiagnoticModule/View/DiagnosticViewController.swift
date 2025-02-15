@@ -26,7 +26,7 @@ enum Constants {
     static let galleryUnavailableTitle = "Gallery Unavailable"
     static let galleryUnavailableMessage = "Access to the gallery is not available."
 
-    static let serverURL = "http://neuroalz-api-292378482352.us-central1.run.app/predict"
+    static let serverURL = "https://my-flask-app-608127581259.us-central1.run.app/predict"
 }
 
 /// DiagnosticViewController
@@ -88,6 +88,13 @@ class DiagnosticViewController: UIViewController, UIImagePickerControllerDelegat
             target: self,
             action: #selector(settingsTapped)
         )
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        if !UserDefaults.standard.bool(forKey: "hasShownOnboarding") {
+            coordinator?.showOnboarding()
+        }
     }
 
     private func setupUI() {
