@@ -22,6 +22,7 @@ final class NameEntryViewModel {
             probability: probability,
             diagnosis: diagnosis
         )
+        print("Saving record: \(record)")
         DataManager.shared.addRecord(record)
     }
 }

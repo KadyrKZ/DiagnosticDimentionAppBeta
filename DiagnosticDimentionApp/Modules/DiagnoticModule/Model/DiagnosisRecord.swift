@@ -4,7 +4,7 @@
 import Foundation
 
 /// DiagnosisRecord
-struct DiagnosisRecord {
+struct DiagnosisRecord: Codable {
     let patientName: String
     let date: Date
     let probability: Double
