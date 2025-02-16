@@ -27,7 +27,7 @@ class CircularProgressView: UIView {
 
     private func createCircularPath() {
         backgroundColor = .clear
-        let centerPoint = CGPoint(x: frame.size.width / 2, y: frame.size.height / 2)
+        let centerPoint = CGPoint(x: frame.size.width / 2.2, y: frame.size.height / 2.2)
         let radius = (frame.size.width - 20) / 2
         let startAngle = -CGFloat.pi / 2
         let endAngle = startAngle + 2 * CGFloat.pi
@@ -56,9 +56,9 @@ class CircularProgressView: UIView {
     }
 
     func updateView() {
-        guard let vm = viewModel else { return }
-        progressLayer.strokeEnd = vm.progress
-        progressLayer.strokeColor = vm.strokeColor.cgColor
+        guard let viewModel = viewModel else { return }
+        progressLayer.strokeEnd = viewModel.progress
+        progressLayer.strokeColor = viewModel.strokeColor.cgColor
     }
 }
 

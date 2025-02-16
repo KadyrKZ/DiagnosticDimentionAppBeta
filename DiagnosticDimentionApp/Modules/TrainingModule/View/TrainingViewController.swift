@@ -22,8 +22,24 @@ final class TrainingViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .historyPage
+        title = "Training"
+        setupBackgroundImage()
         setupCollectionView()
+    }
+
+    private func setupBackgroundImage() {
+        let backgroundImageView = UIImageView(image: .background)
+        backgroundImageView.contentMode = .scaleAspectFill
+        backgroundImageView.translatesAutoresizingMaskIntoConstraints = false
+
+        view.insertSubview(backgroundImageView, at: 0)
+
+        NSLayoutConstraint.activate([
+            backgroundImageView.topAnchor.constraint(equalTo: view.topAnchor),
+            backgroundImageView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            backgroundImageView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            backgroundImageView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
+        ])
     }
 
     private func setupCollectionView() {
@@ -32,13 +48,11 @@ final class TrainingViewController: UIViewController {
         layout.minimumInteritemSpacing = spacing
         layout.minimumLineSpacing = spacing
 
-        // Calculate cell size for 2 columns.
-        let availableWidth = view.frame.width - spacing * 3
-        let cellWidth = availableWidth / 2
+        let width = view.bounds.width
+        let availableWidth = width - spacing * 3
+        let cellWidth = availableWidth / 2.1
         layout.itemSize = CGSize(width: cellWidth, height: cellWidth * 1.2)
-
-        // Set header size using constant.
-        layout.headerReferenceSize = CGSize(width: view.frame.width, height: TrainingConstants.headerHeight)
+        layout.headerReferenceSize = CGSize(width: width, height: TrainingConstants.headerHeight)
 
         collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.translatesAutoresizingMaskIntoConstraints = false
@@ -46,7 +60,6 @@ final class TrainingViewController: UIViewController {
         collectionView.dataSource = self
         collectionView.delegate = self
 
-        // Register cell and header view.
         collectionView.register(
             TrainingCollectionViewCell.self,
             forCellWithReuseIdentifier: TrainingCollectionViewCell.reuseIdentifier
@@ -61,9 +74,9 @@ final class TrainingViewController: UIViewController {
 
         NSLayoutConstraint.activate([
             collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: spacing),
-            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: spacing),
-            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -spacing),
-            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor, constant: -spacing)
+            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
+            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
+            collectionView.bottomAnchor.constraint(equalTo: view.safeAreaLayoutGuide.bottomAnchor, constant: -spacing)
         ])
     }
 }
@@ -117,6 +130,7 @@ extension TrainingViewController: UICollectionViewDataSource {
 extension TrainingViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         let model = viewModel.trainingSections[indexPath.section].items[indexPath.item]
+        print("selected \(model)")
         coordinator?.didSelectTraining(model: model)
     }
 }

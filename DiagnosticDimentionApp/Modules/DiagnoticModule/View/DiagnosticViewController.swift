@@ -25,7 +25,6 @@ enum Constants {
     static let videoRecordingUnavailableMessage = "Video recording is not available on this device."
     static let galleryUnavailableTitle = "Gallery Unavailable"
     static let galleryUnavailableMessage = "Access to the gallery is not available."
-
     static let serverURL = "https://my-flask-app-608127581259.us-central1.run.app/predict"
 }
 
@@ -58,7 +57,7 @@ class DiagnosticViewController: UIViewController, UIImagePickerControllerDelegat
         button.setTitle(Constants.recordButtonTitle, for: .normal)
         button.titleLabel?.font = UIFont(name: "InriaSans-Bold", size: 16)
         button.backgroundColor = UIColor(named: "buttonColor")
-        button.setTitleColor(.black, for: .normal)
+        button.setTitleColor(.label, for: .normal)
         button.layer.cornerRadius = 34
         button.translatesAutoresizingMaskIntoConstraints = false
         return button
@@ -70,8 +69,19 @@ class DiagnosticViewController: UIViewController, UIImagePickerControllerDelegat
         button.titleLabel?.font = UIFont(name: "InriaSans-Bold", size: 16)
         button.backgroundColor = UIColor(named: "buttonColor")
         button.layer.cornerRadius = 34
-        button.setTitleColor(.black, for: .normal)
+        button.setTitleColor(.label, for: .normal)
         button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+
+    private lazy var settingsButton: UIButton = {
+        let button = UIButton(type: .system)
+        let symbolConfig = UIImage.SymbolConfiguration(pointSize: 30, weight: .regular)
+        let gearImage = UIImage(systemName: "gear", withConfiguration: symbolConfig)?.withRenderingMode(.alwaysTemplate)
+        button.setImage(gearImage, for: .normal)
+        button.tintColor = UIColor.tabbarIcon
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.addTarget(self, action: #selector(settingsTapped), for: .touchUpInside)
         return button
     }()
 
@@ -82,19 +92,13 @@ class DiagnosticViewController: UIViewController, UIImagePickerControllerDelegat
         setupBackgroundImage()
         setupUI()
         setupBindings()
-        navigationItem.rightBarButtonItem = UIBarButtonItem(
-            title: Constants.settingsButtonTitle,
-            style: .plain,
-            target: self,
-            action: #selector(settingsTapped)
-        )
-    }
+        let settingsBarButton = UIBarButtonItem(customView: settingsButton)
+        navigationItem.rightBarButtonItem = settingsBarButton
 
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        if !UserDefaults.standard.bool(forKey: "hasShownOnboarding") {
-            coordinator?.showOnboarding()
-        }
+        NSLayoutConstraint.activate([
+            settingsButton.widthAnchor.constraint(equalToConstant: 30),
+            settingsButton.heightAnchor.constraint(equalToConstant: 30)
+        ])
     }
 
     private func setupUI() {
@@ -106,13 +110,16 @@ class DiagnosticViewController: UIViewController, UIImagePickerControllerDelegat
         NSLayoutConstraint.activate([
             titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
             titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
+
             instructionsLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 20),
             instructionsLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 50),
             instructionsLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -40),
+
             recordButton.topAnchor.constraint(equalTo: instructionsLabel.bottomAnchor, constant: 180),
             recordButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 60),
             recordButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -60),
             recordButton.heightAnchor.constraint(equalToConstant: 67),
+
             galleryButton.topAnchor.constraint(equalTo: recordButton.bottomAnchor, constant: 20),
             galleryButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 60),
             galleryButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -60),

@@ -25,37 +25,43 @@ final class CircularResultViewController: UIViewController {
     private let probabilityDescriptionLabel: UILabel = {
         let label = UILabel()
         label.text = ""
-        label.font = UIFont.systemFont(ofSize: 16)
+        label.font = UIFont(name: "InriaSans-Bold", size: 24)
         label.textAlignment = .center
-        label.numberOfLines = 2
+        label.numberOfLines = 0
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
 
     private let diagnosisLabel: UILabel = {
         let label = UILabel()
-        label.text = ""
+        label.text = CircularResultConstants.diagnosisPrefix
         label.font = UIFont.systemFont(ofSize: 18)
         label.textAlignment = .center
+        label.numberOfLines = 0
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
 
     private let nameTextField: UITextField = {
-        let tf = UITextField()
-        tf.placeholder = "Enter name to save result"
-        tf.borderStyle = .roundedRect
-        tf.translatesAutoresizingMaskIntoConstraints = false
-        return tf
+        let textField = UITextField()
+        textField.placeholder = "Enter name to save result"
+        textField.borderStyle = .roundedRect
+        textField.translatesAutoresizingMaskIntoConstraints = false
+        return textField
     }()
 
     private lazy var saveButton: UIButton = {
-        let btn = UIButton(type: .system)
-        btn.setTitle("Save", for: .normal)
-        btn.titleLabel?.font = UIFont.boldSystemFont(ofSize: 16)
-        btn.addTarget(self, action: #selector(saveButtonTapped), for: .touchUpInside)
-        btn.translatesAutoresizingMaskIntoConstraints = false
-        return btn
+        let button = UIButton()
+        button.setTitle(SettingsConstants.doneButtonTitle, for: .normal)
+        button.titleLabel?.font = UIFont(name: "InriaSans-Bold", size: 16)
+        button.backgroundColor = UIColor(named: "buttonColor")
+        button.layer.borderColor = UIColor.label.cgColor
+        button.layer.borderWidth = 1
+        button.setTitleColor(.label, for: .normal)
+        button.layer.cornerRadius = 28
+        button.addTarget(self, action: #selector(saveButtonTapped), for: .touchUpInside)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
     }()
 
     private lazy var backButton: UIButton = {
@@ -82,7 +88,7 @@ final class CircularResultViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .systemBackground
+        view.backgroundColor = .button
         setupUI()
         updateUI()
     }
@@ -102,8 +108,8 @@ final class CircularResultViewController: UIViewController {
 
             circularProgressView.centerXAnchor.constraint(equalTo: view.centerXAnchor),
             circularProgressView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 80),
-            circularProgressView.widthAnchor.constraint(equalToConstant: 200),
-            circularProgressView.heightAnchor.constraint(equalToConstant: 200),
+            circularProgressView.widthAnchor.constraint(equalToConstant: 180),
+            circularProgressView.heightAnchor.constraint(equalToConstant: 180),
 
             percentageLabel.centerXAnchor.constraint(equalTo: circularProgressView.centerXAnchor),
             percentageLabel.centerYAnchor.constraint(equalTo: circularProgressView.centerYAnchor),
@@ -121,8 +127,10 @@ final class CircularResultViewController: UIViewController {
             nameTextField.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -40),
             nameTextField.heightAnchor.constraint(equalToConstant: 40),
 
-            saveButton.topAnchor.constraint(equalTo: nameTextField.bottomAnchor, constant: 10),
-            saveButton.centerXAnchor.constraint(equalTo: view.centerXAnchor)
+            saveButton.topAnchor.constraint(equalTo: nameTextField.bottomAnchor, constant: 14),
+            saveButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 80),
+            saveButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -80),
+            saveButton.heightAnchor.constraint(equalToConstant: 56)
         ])
     }
 
@@ -132,7 +140,6 @@ final class CircularResultViewController: UIViewController {
 
         circularProgressView.progress = normalized
         percentageLabel.text = "\(Int(clampedPercentage))%"
-        diagnosisLabel.text = CircularResultConstants.diagnosisPrefix + diagnosis
         probabilityDescriptionLabel.text = probabilityDescription(for: clampedPercentage)
     }
 

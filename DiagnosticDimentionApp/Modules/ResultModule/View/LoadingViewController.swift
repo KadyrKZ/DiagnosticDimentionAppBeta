@@ -15,7 +15,7 @@ final class LoadingViewController: UIViewController {
         label.font = UIFont.systemFont(ofSize: 18)
         label.numberOfLines = 0
         label.textAlignment = .center
-        label.textColor = .black
+        label.textColor = .label
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()

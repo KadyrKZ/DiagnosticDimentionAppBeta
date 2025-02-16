@@ -4,14 +4,14 @@
 import UIKit
 
 protocol TrainingBuilderProtocol {
-    func configureModule() -> UIViewController
+    func configureModule(coordinator: TrainingCoordinatorProtocol) -> UIViewController
 }
 
 final class TrainingBuilder: TrainingBuilderProtocol {
-    func configureModule() -> UIViewController {
+    func configureModule(coordinator: TrainingCoordinatorProtocol) -> UIViewController {
         let trainingVC = TrainingViewController()
-        let viewModel = TrainingViewModel()
-        trainingVC.viewModel = viewModel
+        trainingVC.viewModel = TrainingViewModel()
+        trainingVC.coordinator = coordinator
         return trainingVC
     }
 }

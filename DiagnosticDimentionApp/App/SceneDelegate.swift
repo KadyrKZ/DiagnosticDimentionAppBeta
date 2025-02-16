@@ -15,11 +15,14 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
     ) {
         guard let windowScene = (scene as? UIWindowScene) else { return }
 
-        // Создаем окно и запускаем AppCoordinator
         let window = UIWindow(windowScene: windowScene)
         self.window = window
 
+        let selectedThemeIndex = UserDefaults.standard.integer(forKey: "selectedThemeIndex")
+        window.overrideUserInterfaceStyle = (selectedThemeIndex == 1) ? .dark : .light
+
         appCoordinator = AppCoordinator(window: window)
         appCoordinator?.start()
+        window.makeKeyAndVisible()
     }
 }

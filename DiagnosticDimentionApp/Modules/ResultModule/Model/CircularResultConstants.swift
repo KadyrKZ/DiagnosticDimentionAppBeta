@@ -8,12 +8,12 @@ import UIKit
 /// CircularResultConstants
 enum CircularResultConstants {
     static let defaultPercentageText = "0%"
-    static let diagnosisPrefix = "Diagnosis: "
+    static let diagnosisPrefix = "For an accurate diagnosis, check in specialized centers. The result may be erroneous!"
 
-    static let veryLowProbability = "Very low probability"
-    static let lowProbability = "Low probability"
-    static let goodProbability = "Good probability"
-    static let veryHighProbability = "Very high probability"
+    static let veryLowProbability = "Very low probability of Parkinson's"
+    static let lowProbability = "Low probability of Parkinson's"
+    static let goodProbability = "Good probability of Parkinson's"
+    static let veryHighProbability = "Very high probability of Parkinson's"
 
     static let noName = "No Name"
 

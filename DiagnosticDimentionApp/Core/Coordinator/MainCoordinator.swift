@@ -25,16 +25,24 @@ final class MainCoordinator: BaseCoordinator {
         let symbolConfig = UIImage.SymbolConfiguration(pointSize: 20, weight: .bold)
         let diagnosticImage = UIImage(systemName: "waveform.path.ecg", withConfiguration: symbolConfig)
         diagnosticNavController.tabBarItem = UITabBarItem(
-            title: "",
+            title: "Diagnostics",
             image: diagnosticImage,
             selectedImage: diagnosticImage
         )
 
         let historyImage = UIImage(systemName: "clock", withConfiguration: symbolConfig)
-        historyNavController.tabBarItem = UITabBarItem(title: "", image: historyImage, selectedImage: historyImage)
-
-        let trainingImage = UIImage(systemName: "figure.walk", withConfiguration: symbolConfig)
-        trainingNavController.tabBarItem = UITabBarItem(title: "", image: trainingImage, selectedImage: trainingImage)
+        let historySelectedImage = UIImage(systemName: "clock.fill", withConfiguration: symbolConfig)
+        historyNavController.tabBarItem = UITabBarItem(
+            title: "History",
+            image: historyImage,
+            selectedImage: historySelectedImage
+        )
+        let trainingImage = UIImage(systemName: "figure.mind.and.body", withConfiguration: symbolConfig)
+        trainingNavController.tabBarItem = UITabBarItem(
+            title: "Training",
+            image: trainingImage,
+            selectedImage: trainingImage
+        )
         tabBarController.tabBar.isTranslucent = true
         tabBarController.tabBar.tintColor = .tabbarIcon
 

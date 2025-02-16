@@ -8,7 +8,7 @@ final class TrainingCollectionViewCell: UICollectionViewCell {
 
     private let imageView: UIImageView = {
         let iv = UIImageView()
-        iv.contentMode = .scaleAspectFit
+        iv.contentMode = .scaleAspectFill
         iv.translatesAutoresizingMaskIntoConstraints = false
         return iv
     }()
@@ -19,17 +19,15 @@ final class TrainingCollectionViewCell: UICollectionViewCell {
         label.textAlignment = .center
         label.numberOfLines = 2
         label.translatesAutoresizingMaskIntoConstraints = false
-        label.textColor = .black
+        label.textColor = .label
         return label
     }()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
-        contentView.backgroundColor = .white
+        contentView.backgroundColor = .button
         contentView.layer.cornerRadius = 8
         contentView.layer.masksToBounds = true
-        contentView.layer.borderWidth = 1
-        contentView.layer.borderColor = UIColor.lightGray.cgColor
         setupUI()
     }
 
@@ -43,9 +41,9 @@ final class TrainingCollectionViewCell: UICollectionViewCell {
         contentView.addSubview(titleLabel)
 
         NSLayoutConstraint.activate([
-            imageView.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 8),
+            imageView.topAnchor.constraint(equalTo: contentView.topAnchor),
             imageView.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
-            imageView.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 0.5),
+            imageView.widthAnchor.constraint(equalTo: contentView.widthAnchor, multiplier: 1.0),
             imageView.heightAnchor.constraint(equalTo: imageView.widthAnchor),
 
             titleLabel.topAnchor.constraint(equalTo: imageView.bottomAnchor, constant: 4),

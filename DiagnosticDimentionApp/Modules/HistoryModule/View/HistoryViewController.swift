@@ -14,21 +14,35 @@ final class HistoryViewController: UITableViewController {
     weak var coordinator: HistoryCoordinator?
     var viewModel: HistoryViewModel!
 
+    private lazy var clearButton: UIButton = {
+        let button = UIButton(type: .system)
+        let symbolConfig = UIImage.SymbolConfiguration(pointSize: 20, weight: .regular)
+        let gearImage = UIImage(systemName: "trash", withConfiguration: symbolConfig)?
+            .withRenderingMode(.alwaysTemplate)
+        button.setImage(gearImage, for: .normal)
+        button.tintColor = UIColor.tabbarIcon
+        button.translatesAutoresizingMaskIntoConstraints = false
+        button.addTarget(self, action: #selector(clearHistoryTapped), for: .touchUpInside)
+        return button
+    }()
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        tableView.backgroundColor = UIColor(named: "historyPageColor")
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "Cell")
-        navigationItem.rightBarButtonItem = UIBarButtonItem(
-            title: HistoryConstants.clearButtonTitle,
-            style: .plain,
-            target: self,
-            action: #selector(clearHistoryTapped)
-        )
+        title = "History"
+        tableView.backgroundColor = .historyBackground
+        tableView.register(HistoryTableViewCell.self, forCellReuseIdentifier: HistoryTableViewCell.reuseIdentifier)
+        let clearBarButton = UIBarButtonItem(customView: clearButton)
+        navigationItem.rightBarButtonItem = clearBarButton
+
+        NSLayoutConstraint.activate([
+            clearButton.widthAnchor.constraint(equalToConstant: 20),
+            clearButton.heightAnchor.constraint(equalToConstant: 24)
+        ])
     }
 
-    override func viewWillLayoutSubviews() {
-        super.viewWillLayoutSubviews()
-        tableView.backgroundColor = .historyBackground
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        tableView.reloadData()
     }
 
     @objc private func clearHistoryTapped() {
@@ -42,20 +56,14 @@ final class HistoryViewController: UITableViewController {
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let record = viewModel.records[indexPath.row]
-        let cell = tableView.dequeueReusableCell(withIdentifier: "Cell", for: indexPath)
-
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateStyle = .medium
-        dateFormatter.timeStyle = .short
-        let dateStr = dateFormatter.string(from: record.date)
-
-        cell.textLabel?.numberOfLines = 0
-        cell.textLabel?.text = """
-        \(record.patientName)
-        \(HistoryConstants.probabilityPrefix)\(Int(record.probability))%
-        \(HistoryConstants.diagnosisPrefix)\(record.diagnosis)
-        \(dateStr)
-        """
+        guard let cell = tableView.dequeueReusableCell(
+            withIdentifier: HistoryTableViewCell.reuseIdentifier,
+            for: indexPath
+        ) as? HistoryTableViewCell else {
+            return UITableViewCell()
+        }
+        cell.backgroundColor = .clear
+        cell.configure(with: record)
         return cell
     }
 }
