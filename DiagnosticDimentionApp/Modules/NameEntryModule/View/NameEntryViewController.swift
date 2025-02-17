@@ -8,7 +8,6 @@ enum NameEntryConstants {
     static let viewTitle = "Enter Patient Name"
     static let placeholder = "Enter your name"
     static let saveButtonTitle = "Save"
-    static let keyboardShift: CGFloat = 70
 }
 
 protocol NameEntryCoordinatorProtocol: AnyObject {
@@ -18,6 +17,19 @@ protocol NameEntryCoordinatorProtocol: AnyObject {
 final class NameEntryViewController: UIViewController {
     private let viewModel: NameEntryViewModel
     private weak var coordinator: NameEntryCoordinatorProtocol?
+
+    // Оборачиваем содержимое в scrollView
+    private let scrollView: UIScrollView = {
+        let sv = UIScrollView()
+        sv.translatesAutoresizingMaskIntoConstraints = false
+        return sv
+    }()
+
+    private let contentView: UIView = {
+        let view = UIView()
+        view.translatesAutoresizingMaskIntoConstraints = false
+        return view
+    }()
 
     private lazy var nameTextField: UITextField = {
         let tf = UITextField()
@@ -32,7 +44,8 @@ final class NameEntryViewController: UIViewController {
         self.viewModel = viewModel
         self.coordinator = coordinator
         super.init(nibName: nil, bundle: nil)
-        modalPresentationStyle = .overFullScreen
+        modalPresentationStyle =
+            .fullScreen // или .overFullScreen, если нужно, но fullScreen лучше для автолейаута клавиатуры
     }
 
     @available(*, unavailable)
@@ -44,21 +57,21 @@ final class NameEntryViewController: UIViewController {
         super.viewDidLoad()
         title = NameEntryConstants.viewTitle
         view.backgroundColor = .white
+
+        setupScrollView()
         setupUI()
+
         nameTextField.delegate = self
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
         tapGesture.cancelsTouchesInView = false
         view.addGestureRecognizer(tapGesture)
+
         navigationItem.rightBarButtonItem = UIBarButtonItem(
             title: NameEntryConstants.saveButtonTitle,
             style: .done,
             target: self,
             action: #selector(didTapSave)
         )
-    }
-
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
         NotificationCenter.default.addObserver(
             self,
             selector: #selector(keyboardWillShow(notification:)),
@@ -73,19 +86,37 @@ final class NameEntryViewController: UIViewController {
         )
     }
 
-    override func viewWillDisappear(_ animated: Bool) {
-        super.viewWillDisappear(animated)
-        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillShowNotification, object: nil)
-        NotificationCenter.default.removeObserver(self, name: UIResponder.keyboardWillHideNotification, object: nil)
+    deinit {
+        NotificationCenter.default.removeObserver(self)
+    }
+
+    private func setupScrollView() {
+        view.addSubview(scrollView)
+        scrollView.addSubview(contentView)
+
+        NSLayoutConstraint.activate([
+            scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor),
+
+            contentView.topAnchor.constraint(equalTo: scrollView.topAnchor),
+            contentView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
+            contentView.trailingAnchor.constraint(equalTo: scrollView.trailingAnchor),
+            contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
+            contentView.widthAnchor.constraint(equalTo: scrollView.widthAnchor)
+        ])
     }
 
     private func setupUI() {
-        view.addSubview(nameTextField)
+        contentView.addSubview(nameTextField)
+
         NSLayoutConstraint.activate([
-            nameTextField.centerXAnchor.constraint(equalTo: view.centerXAnchor),
-            nameTextField.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 40),
+            nameTextField.centerXAnchor.constraint(equalTo: contentView.centerXAnchor),
+            nameTextField.topAnchor.constraint(equalTo: contentView.safeAreaLayoutGuide.topAnchor, constant: 40),
             nameTextField.widthAnchor.constraint(equalToConstant: 250),
-            nameTextField.heightAnchor.constraint(equalToConstant: 40)
+            nameTextField.heightAnchor.constraint(equalToConstant: 40),
+            nameTextField.bottomAnchor.constraint(lessThanOrEqualTo: contentView.bottomAnchor, constant: -20)
         ])
     }
 
@@ -101,19 +132,18 @@ final class NameEntryViewController: UIViewController {
     }
 
     @objc private func keyboardWillShow(notification: Notification) {
-        if view.frame.origin.y == 0 {
-            UIView.animate(withDuration: 0.3) {
-                self.view.frame.origin.y -= NameEntryConstants.keyboardShift
-            }
-        }
+        guard let userInfo = notification.userInfo,
+              let keyboardFrame = userInfo[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else { return }
+
+        // Увеличиваем contentInset нижней части scrollView на высоту клавиатуры
+        let keyboardHeight = keyboardFrame.height
+        scrollView.contentInset.bottom = keyboardHeight
+        scrollView.verticalScrollIndicatorInsets.bottom = keyboardHeight
     }
 
     @objc private func keyboardWillHide(notification: Notification) {
-        if view.frame.origin.y != 0 {
-            UIView.animate(withDuration: 0.3) {
-                self.view.frame.origin.y = 0
-            }
-        }
+        scrollView.contentInset.bottom = 0
+        scrollView.verticalScrollIndicatorInsets.bottom = 0
     }
 }
 

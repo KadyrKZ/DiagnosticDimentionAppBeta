@@ -1,13 +1,14 @@
 // DiagnosticViewController.swift
 // Copyright © KadyrKZ. All rights reserved.
 
+import AVKit
 import MobileCoreServices
 import UIKit
 import UniformTypeIdentifiers
 
 /// Constants
 enum Constants {
-    static let diagnosticTitle = "Diagnostics"
+    static let diagnosticTitle = "MindShield"
     static let instructionsText = """
     Instructions:
 
@@ -18,6 +19,7 @@ enum Constants {
     static let recordButtonTitle = "Record Video"
     static let galleryButtonTitle = "Select Video from Gallery"
     static let settingsButtonTitle = "Settings"
+    static let instructionVideoButtonTitle = "Watch Instruction Video"
 
     static let cameraUnavailableTitle = "Camera Unavailable"
     static let cameraUnavailableMessage = "This device does not support video recording."
@@ -25,7 +27,8 @@ enum Constants {
     static let videoRecordingUnavailableMessage = "Video recording is not available on this device."
     static let galleryUnavailableTitle = "Gallery Unavailable"
     static let galleryUnavailableMessage = "Access to the gallery is not available."
-    static let serverURL = "https://my-flask-app-608127581259.us-central1.run.app/predict"
+
+    static let serverURL = "https://neuroalz-api-719509516996.us-central1.run.app/predict"
 }
 
 /// DiagnosticViewController
@@ -74,6 +77,17 @@ class DiagnosticViewController: UIViewController, UIImagePickerControllerDelegat
         return button
     }()
 
+    private let instructionVideoButton: UIButton = {
+        let button = UIButton(type: .system)
+        button.setTitle(Constants.instructionVideoButtonTitle, for: .normal)
+        button.titleLabel?.font = UIFont(name: "InriaSans-Bold", size: 16)
+        button.backgroundColor = UIColor(named: "buttonColor")
+        button.layer.cornerRadius = 34
+        button.setTitleColor(.systemRed, for: .normal)
+        button.translatesAutoresizingMaskIntoConstraints = false
+        return button
+    }()
+
     private lazy var settingsButton: UIButton = {
         let button = UIButton(type: .system)
         let symbolConfig = UIImage.SymbolConfiguration(pointSize: 30, weight: .regular)
@@ -92,6 +106,7 @@ class DiagnosticViewController: UIViewController, UIImagePickerControllerDelegat
         setupBackgroundImage()
         setupUI()
         setupBindings()
+
         let settingsBarButton = UIBarButtonItem(customView: settingsButton)
         navigationItem.rightBarButtonItem = settingsBarButton
 
@@ -104,6 +119,7 @@ class DiagnosticViewController: UIViewController, UIImagePickerControllerDelegat
     private func setupUI() {
         view.addSubview(titleLabel)
         view.addSubview(instructionsLabel)
+        view.addSubview(instructionVideoButton)
         view.addSubview(recordButton)
         view.addSubview(galleryButton)
 
@@ -111,11 +127,16 @@ class DiagnosticViewController: UIViewController, UIImagePickerControllerDelegat
             titleLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 20),
             titleLabel.centerXAnchor.constraint(equalTo: view.centerXAnchor),
 
-            instructionsLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 20),
+            instructionsLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 16),
             instructionsLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 50),
             instructionsLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -40),
 
-            recordButton.topAnchor.constraint(equalTo: instructionsLabel.bottomAnchor, constant: 180),
+            instructionVideoButton.topAnchor.constraint(equalTo: instructionsLabel.bottomAnchor, constant: 40),
+            instructionVideoButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 60),
+            instructionVideoButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -60),
+            instructionVideoButton.heightAnchor.constraint(equalToConstant: 67),
+
+            recordButton.topAnchor.constraint(equalTo: instructionVideoButton.bottomAnchor, constant: 20),
             recordButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 60),
             recordButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -60),
             recordButton.heightAnchor.constraint(equalToConstant: 67),
@@ -128,6 +149,7 @@ class DiagnosticViewController: UIViewController, UIImagePickerControllerDelegat
 
         recordButton.addTarget(self, action: #selector(recordButtonTapped), for: .touchUpInside)
         galleryButton.addTarget(self, action: #selector(galleryButtonTapped), for: .touchUpInside)
+        instructionVideoButton.addTarget(self, action: #selector(instructionVideoTapped), for: .touchUpInside)
     }
 
     private func setupBackgroundImage() {
@@ -167,7 +189,6 @@ class DiagnosticViewController: UIViewController, UIImagePickerControllerDelegat
             showAlert(title: Constants.cameraUnavailableTitle, message: Constants.cameraUnavailableMessage)
             return
         }
-
         guard let availableTypes = UIImagePickerController.availableMediaTypes(for: .camera),
               availableTypes.contains(UTType.movie.identifier)
         else {
@@ -177,7 +198,6 @@ class DiagnosticViewController: UIViewController, UIImagePickerControllerDelegat
             )
             return
         }
-
         let imagePicker = UIImagePickerController()
         imagePicker.delegate = self
         imagePicker.sourceType = .camera
@@ -200,6 +220,19 @@ class DiagnosticViewController: UIViewController, UIImagePickerControllerDelegat
 
     @objc private func settingsTapped() {
         coordinator?.showSettings()
+    }
+
+    @objc private func instructionVideoTapped() {
+        if let videoURL = Bundle.main.url(forResource: "instructionVideo", withExtension: "mp4") {
+            let player = AVPlayer(url: videoURL)
+            let playerVC = AVPlayerViewController()
+            playerVC.player = player
+            present(playerVC, animated: true) {
+                player.play()
+            }
+        } else {
+            showAlert(title: "Error", message: "Instruction video not found.")
+        }
     }
 
     func imagePickerController(
