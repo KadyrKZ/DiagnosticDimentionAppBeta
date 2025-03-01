@@ -6,6 +6,10 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		BD47FC442D73A919009B39FB /* Localize_Swift in Frameworks */ = {isa = PBXBuildFile; productRef = BD47FC432D73A919009B39FB /* Localize_Swift */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXContainerItemProxy section */
 		BD389A352D5A8382005E7598 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
@@ -65,6 +69,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				BD47FC442D73A919009B39FB /* Localize_Swift in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -127,6 +132,7 @@
 			);
 			name = DiagnosticDimentionApp;
 			packageProductDependencies = (
+				BD47FC432D73A919009B39FB /* Localize_Swift */,
 			);
 			productName = DiagnosticDimentionApp;
 			productReference = BD389A1B2D5A8380005E7598 /* DiagnosticDimentionApp.app */;
@@ -207,11 +213,13 @@
 			knownRegions = (
 				en,
 				Base,
+				ru,
 			);
 			mainGroup = BD389A122D5A8380005E7598;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
 				BDF858782D614A1A00369528 /* XCRemoteSwiftPackageReference "SnapKit" */,
+				BD47FC422D73A919009B39FB /* XCRemoteSwiftPackageReference "Localize-Swift" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = BD389A1C2D5A8380005E7598 /* Products */;
@@ -455,6 +463,7 @@
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 			};
 			name = Debug;
@@ -511,6 +520,7 @@
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_EMIT_LOC_STRINGS = YES;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
@@ -625,6 +635,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		BD47FC422D73A919009B39FB /* XCRemoteSwiftPackageReference "Localize-Swift" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/marmelroy/Localize-Swift.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.2.0;
+			};
+		};
 		BDF858782D614A1A00369528 /* XCRemoteSwiftPackageReference "SnapKit" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/SnapKit/SnapKit.git";
@@ -634,6 +652,14 @@
 			};
 		};
 /* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		BD47FC432D73A919009B39FB /* Localize_Swift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = BD47FC422D73A919009B39FB /* XCRemoteSwiftPackageReference "Localize-Swift" */;
+			productName = Localize_Swift;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = BD389A132D5A8380005E7598 /* Project object */;
 }

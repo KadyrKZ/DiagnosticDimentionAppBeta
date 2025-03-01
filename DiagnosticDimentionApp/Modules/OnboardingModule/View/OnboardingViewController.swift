@@ -3,29 +3,7 @@
 
 import UIKit
 
-/// OnboardingConstants
-enum OnboardingConstants {
-    static let welcomeTitle = "Welcome to Cognitive Diagnostics"
-    static let descriptionText = """
-    This app is designed for diagnosing cognitive impairments,
-    such as Alzheimer's and Parkinson's disease.
-    You can record a video of your gait and get a preliminary result
-    expressed in percentage.
-    """
-    static let instructionsText = """
-    Instructions:
-    1. Tap "Record Video" to start recording.
-    2. Follow the recommendations (good lighting, proper camera angle).
-    3. Wait for the analysis results.
-    """
-    static let disclaimerText = """
-    Disclaimer: This app does not replace a doctor's consultation.
-    The results are preliminary and for informational purposes only.
-    """
-    static let continueButtonTitle = "Start"
-}
-
-/// OnboardingViewController
+/// Onboarding view controller.
 class OnboardingViewController: UIViewController {
     // MARK: - UI Elements
 
@@ -111,14 +89,37 @@ class OnboardingViewController: UIViewController {
 
     private func setupUI() {
         view.addSubview(scrollView)
+        setupScrollViewConstraints()
+
+        scrollView.addSubview(contentView)
+        setupContentViewConstraints()
+
+        contentView.addSubview(titleLabel)
+        setupTitleLabelConstraints()
+
+        contentView.addSubview(descriptionLabel)
+        setupDescriptionLabelConstraints()
+
+        contentView.addSubview(instructionsLabel)
+        setupInstructionsLabelConstraints()
+
+        contentView.addSubview(disclaimerLabel)
+        setupDisclaimerLabelConstraints()
+
+        contentView.addSubview(continueButton)
+        setupContinueButtonConstraints()
+    }
+
+    private func setupScrollViewConstraints() {
         NSLayoutConstraint.activate([
             scrollView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
             scrollView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             scrollView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             scrollView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
+    }
 
-        scrollView.addSubview(contentView)
+    private func setupContentViewConstraints() {
         NSLayoutConstraint.activate([
             contentView.topAnchor.constraint(equalTo: scrollView.topAnchor),
             contentView.leadingAnchor.constraint(equalTo: scrollView.leadingAnchor),
@@ -126,30 +127,42 @@ class OnboardingViewController: UIViewController {
             contentView.bottomAnchor.constraint(equalTo: scrollView.bottomAnchor),
             contentView.widthAnchor.constraint(equalTo: view.widthAnchor)
         ])
+    }
 
-        contentView.addSubview(titleLabel)
-        contentView.addSubview(descriptionLabel)
-        contentView.addSubview(instructionsLabel)
-        contentView.addSubview(disclaimerLabel)
-        contentView.addSubview(continueButton)
-
+    private func setupTitleLabelConstraints() {
         NSLayoutConstraint.activate([
             titleLabel.topAnchor.constraint(equalTo: contentView.topAnchor, constant: 40),
             titleLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-            titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
+            titleLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20)
+        ])
+    }
 
+    private func setupDescriptionLabelConstraints() {
+        NSLayoutConstraint.activate([
             descriptionLabel.topAnchor.constraint(equalTo: titleLabel.bottomAnchor, constant: 20),
             descriptionLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-            descriptionLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
+            descriptionLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20)
+        ])
+    }
 
+    private func setupInstructionsLabelConstraints() {
+        NSLayoutConstraint.activate([
             instructionsLabel.topAnchor.constraint(equalTo: descriptionLabel.bottomAnchor, constant: 20),
             instructionsLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-            instructionsLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
+            instructionsLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20)
+        ])
+    }
 
+    private func setupDisclaimerLabelConstraints() {
+        NSLayoutConstraint.activate([
             disclaimerLabel.topAnchor.constraint(equalTo: instructionsLabel.bottomAnchor, constant: 20),
             disclaimerLabel.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 20),
-            disclaimerLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20),
+            disclaimerLabel.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -20)
+        ])
+    }
 
+    private func setupContinueButtonConstraints() {
+        NSLayoutConstraint.activate([
             continueButton.topAnchor.constraint(equalTo: disclaimerLabel.bottomAnchor, constant: 40),
             continueButton.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 50),
             continueButton.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -50),

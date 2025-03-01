@@ -3,7 +3,10 @@
 
 import UIKit
 
+/// A reusable view that displays a section header title for training sections.
 final class TrainingSectionHeaderView: UICollectionReusableView {
+    // MARK: - Properties
+
     static let reuseIdentifier = "TrainingSectionHeaderView"
 
     private let titleLabel: UILabel = {
@@ -13,6 +16,8 @@ final class TrainingSectionHeaderView: UICollectionReusableView {
         label.translatesAutoresizingMaskIntoConstraints = false
         return label
     }()
+
+    // MARK: - Initialization
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -27,6 +32,8 @@ final class TrainingSectionHeaderView: UICollectionReusableView {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+
+    // MARK: - Configuration
 
     func configure(with title: String) {
         titleLabel.text = title

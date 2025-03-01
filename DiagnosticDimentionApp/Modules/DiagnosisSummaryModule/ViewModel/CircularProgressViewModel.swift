@@ -3,12 +3,17 @@
 
 import UIKit
 
+/// A view model that manages the progress value and determines the stroke color based on the progress percentage.
 final class CircularProgressViewModel {
+    // MARK: - Properties
+
     var progress: CGFloat = 0 {
         didSet {
             // Optionally notify about changes.
         }
     }
+
+    // MARK: - Computed Properties
 
     var strokeColor: UIColor {
         let percentage = progress * 100.0

@@ -3,8 +3,11 @@
 
 import UIKit
 
+/// A table view cell that displays a diagnosis record.
 final class HistoryTableViewCell: UITableViewCell {
     static let reuseIdentifier = "HistoryTableViewCell"
+
+    // MARK: - UI Elements
 
     private let containerView: UIView = {
         let view = UIView()

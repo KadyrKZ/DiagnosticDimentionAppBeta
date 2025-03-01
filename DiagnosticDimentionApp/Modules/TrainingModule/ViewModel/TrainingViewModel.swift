@@ -3,8 +3,10 @@
 
 import Foundation
 
+/// View model for managing training sections.
 final class TrainingViewModel {
-    // Dividing 8 training types into 3 sections.
+    // MARK: - Properties
+
     let trainingSections: [TrainingSection] = [
         TrainingSection(title: "For Brain", items: [
             TrainingModel(

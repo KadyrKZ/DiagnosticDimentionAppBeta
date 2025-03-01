@@ -1,29 +1,31 @@
 // DiagnosticCoordinator.swift
 // Copyright © KadyrKZ. All rights reserved.
 
-import Foundation
 import UIKit
 
+/// Coordinator responsible for managing the diagnostic flow.
 final class DiagnosticCoordinator: BaseCoordinator {
     private let navigationController: UINavigationController
+
+    // MARK: - Initialization
 
     init(navigationController: UINavigationController) {
         self.navigationController = navigationController
         super.init()
     }
 
+    // MARK: - Flow Start
+
     override func start() {
         let diagnosticVC = DiagnosticBuilder().configureModule(coordinator: self)
         navigationController.viewControllers = [diagnosticVC]
-        if !UserDefaults.standard.bool(forKey: "hasShownOnboarding") {
+
+        if !UserDefaults.standard.bool(forKey: UserDefaultsKeys.hasShownOnboarding) {
             showOnboarding()
         }
     }
 
-    func showResult(percentage: CGFloat, diagnosis: String) {
-        let resultVC = CircularResultViewController(percentage: percentage, diagnosis: diagnosis)
-        navigationController.present(resultVC, animated: true, completion: nil)
-    }
+    // MARK: - Navigation Methods
 
     func showSettings() {
         let settingsCoord = SettingsCoordinator(navigationController: navigationController)
@@ -34,12 +36,16 @@ final class DiagnosticCoordinator: BaseCoordinator {
     func showOnboarding() {
         let onboardingVC = OnboardingBuilder().configureModule()
         onboardingVC.modalPresentationStyle = .overFullScreen
-        print("Presenting OnboardingViewController")
         DispatchQueue.main.async {
             self.navigationController.present(onboardingVC, animated: true) {
-                print("OnboardingViewController presented")
-                UserDefaults.standard.set(true, forKey: "hasShownOnboarding")
+                UserDefaults.standard.set(true, forKey: UserDefaultsKeys.hasShownOnboarding)
             }
         }
+    }
+
+    func showResult(percentage: CGFloat, diagnosis: String) {
+        let resultCoordinator = DiagnosisResultCoordinator(navigationController: navigationController)
+        add(coordinator: resultCoordinator)
+        resultCoordinator.start(with: percentage, diagnosis: diagnosis)
     }
 }

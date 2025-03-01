@@ -7,6 +7,6 @@ import Foundation
 struct TrainingModel {
     let title: String
     let imageName: String
-    let videoName: String // Имя файла видео (например, "training1")
+    let videoName: String
     let description: String
 }

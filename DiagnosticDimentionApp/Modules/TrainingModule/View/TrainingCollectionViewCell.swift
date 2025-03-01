@@ -3,8 +3,11 @@
 
 import UIKit
 
+/// A collection view cell that displays training content.
 final class TrainingCollectionViewCell: UICollectionViewCell {
     static let reuseIdentifier = "TrainingCell"
+
+    // MARK: - UI Elements
 
     private let imageView: UIImageView = {
         let iv = UIImageView()
@@ -23,6 +26,8 @@ final class TrainingCollectionViewCell: UICollectionViewCell {
         return label
     }()
 
+    // MARK: - Initializers
+
     override init(frame: CGRect) {
         super.init(frame: frame)
         contentView.backgroundColor = .button
@@ -35,6 +40,8 @@ final class TrainingCollectionViewCell: UICollectionViewCell {
     required init?(coder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
+
+    // MARK: - Setup
 
     private func setupUI() {
         contentView.addSubview(imageView)
@@ -52,6 +59,8 @@ final class TrainingCollectionViewCell: UICollectionViewCell {
             titleLabel.bottomAnchor.constraint(equalTo: contentView.bottomAnchor, constant: -8)
         ])
     }
+
+    // MARK: - Configuration
 
     func configure(with model: TrainingModel) {
         titleLabel.text = model.title

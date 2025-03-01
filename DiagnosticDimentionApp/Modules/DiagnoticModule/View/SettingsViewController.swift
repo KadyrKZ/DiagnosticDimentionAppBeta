@@ -1,21 +1,15 @@
 // SettingsViewController.swift
 // Copyright © KadyrKZ. All rights reserved.
 
+import Localize_Swift
 import UIKit
 
-/// SettingsConstants
-enum SettingsConstants {
-    static let languageTitle = "Chose system language"
-    static let themeTitle = "System theme"
-    static let languageItems = ["Kazakh", "Russian", "English"]
-    static let themeItems = ["Light", "Dark"]
-    static let doneButtonTitle = "Done"
-}
-
+/// Protocol for handling settings flow events.
 protocol SettingsCoordinatorProtocol: AnyObject {
     func didFinishSettings()
 }
 
+/// A view controller that manages system settings such as language and theme.
 final class SettingsViewController: UIViewController {
     weak var coordinator: SettingsCoordinatorProtocol?
 
@@ -31,9 +25,16 @@ final class SettingsViewController: UIViewController {
         return label
     }()
 
-    private let languageSegmentedControl: UISegmentedControl = {
+    private lazy var languageSegmentedControl: UISegmentedControl = {
         let control = UISegmentedControl(items: SettingsConstants.languageItems)
-        control.selectedSegmentIndex = UserDefaults.standard.integer(forKey: "selectedLanguageIndex")
+        guard let savedLanguage = UserDefaults.standard.string(forKey: SettingsConstants.selectedLanguageKey),
+              let index = SettingsConstants.languageCodes.firstIndex(of: savedLanguage)
+        else {
+            control.selectedSegmentIndex = 0
+            control.translatesAutoresizingMaskIntoConstraints = false
+            return control
+        }
+        control.selectedSegmentIndex = index
         control.translatesAutoresizingMaskIntoConstraints = false
         return control
     }()
@@ -50,7 +51,7 @@ final class SettingsViewController: UIViewController {
 
     private let themeSegmentedControl: UISegmentedControl = {
         let control = UISegmentedControl(items: SettingsConstants.themeItems)
-        control.selectedSegmentIndex = UserDefaults.standard.integer(forKey: "selectedThemeIndex")
+        control.selectedSegmentIndex = UserDefaults.standard.integer(forKey: SettingsConstants.selectedThemeKey)
         control.translatesAutoresizingMaskIntoConstraints = false
         return control
     }()
@@ -73,10 +74,24 @@ final class SettingsViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .button
+
+        // Если язык сохранён, установим его при загрузке экрана
+        if let savedLanguage = UserDefaults.standard.string(forKey: SettingsConstants.selectedLanguageKey) {
+            Localize.setCurrentLanguage(savedLanguage)
+        }
+
         setupUI()
+        setupConstraints()
         languageSegmentedControl.addTarget(self, action: #selector(languageChanged), for: .valueChanged)
         themeSegmentedControl.addTarget(self, action: #selector(themeChanged), for: .valueChanged)
         doneButton.addTarget(self, action: #selector(doneTapped), for: .touchUpInside)
+
+        NotificationCenter.default.addObserver(
+            self,
+            selector: #selector(updateLocalizedStrings),
+            name: NSNotification.Name(LCLLanguageChangeNotification),
+            object: nil
+        )
     }
 
     // MARK: - UI Setup
@@ -87,24 +102,50 @@ final class SettingsViewController: UIViewController {
         view.addSubview(themeLabel)
         view.addSubview(themeSegmentedControl)
         view.addSubview(doneButton)
+    }
 
+    private func setupConstraints() {
+        setupLanguageLabelConstraints()
+        setupLanguageSegmentedControlConstraints()
+        setupThemeLabelConstraints()
+        setupThemeSegmentedControlConstraints()
+        setupDoneButtonConstraints()
+    }
+
+    private func setupLanguageLabelConstraints() {
         NSLayoutConstraint.activate([
             languageLabel.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 40),
             languageLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            languageLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            languageLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20)
+        ])
+    }
 
+    private func setupLanguageSegmentedControlConstraints() {
+        NSLayoutConstraint.activate([
             languageSegmentedControl.topAnchor.constraint(equalTo: languageLabel.bottomAnchor, constant: 20),
             languageSegmentedControl.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            languageSegmentedControl.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            languageSegmentedControl.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20)
+        ])
+    }
 
+    private func setupThemeLabelConstraints() {
+        NSLayoutConstraint.activate([
             themeLabel.topAnchor.constraint(equalTo: languageSegmentedControl.bottomAnchor, constant: 20),
             themeLabel.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            themeLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            themeLabel.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20)
+        ])
+    }
 
+    private func setupThemeSegmentedControlConstraints() {
+        NSLayoutConstraint.activate([
             themeSegmentedControl.topAnchor.constraint(equalTo: themeLabel.bottomAnchor, constant: 20),
             themeSegmentedControl.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 20),
-            themeSegmentedControl.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20),
+            themeSegmentedControl.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -20)
+        ])
+    }
 
+    private func setupDoneButtonConstraints() {
+        NSLayoutConstraint.activate([
             doneButton.topAnchor.constraint(equalTo: themeSegmentedControl.bottomAnchor, constant: 40),
             doneButton.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 80),
             doneButton.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -80),
@@ -116,13 +157,22 @@ final class SettingsViewController: UIViewController {
 
     @objc private func languageChanged() {
         let selectedIndex = languageSegmentedControl.selectedSegmentIndex
-        UserDefaults.standard.set(selectedIndex, forKey: "selectedLanguageIndex")
-        // Update language using a localization manager if needed.
+        let languageCodes = SettingsConstants.languageCodes
+        let selectedLanguageCode = languageCodes[selectedIndex]
+
+        UserDefaults.standard.set(selectedLanguageCode, forKey: SettingsConstants.selectedLanguageKey)
+        Localize.setCurrentLanguage(selectedLanguageCode)
+    }
+
+    @objc private func updateLocalizedStrings() {
+        languageLabel.text = SettingsConstants.languageTitle
+        themeLabel.text = SettingsConstants.themeTitle
+        doneButton.setTitle(SettingsConstants.doneButtonTitle, for: .normal)
     }
 
     @objc private func themeChanged() {
         let selectedIndex = themeSegmentedControl.selectedSegmentIndex
-        UserDefaults.standard.set(selectedIndex, forKey: "selectedThemeIndex")
+        UserDefaults.standard.set(selectedIndex, forKey: SettingsConstants.selectedThemeKey)
 
         if let windowScene = view.window?.windowScene, let window = windowScene.windows.first {
             window.overrideUserInterfaceStyle = (selectedIndex == 0) ? .light : .dark

@@ -3,29 +3,25 @@
 
 import UIKit
 
-/// TrainingConstants
-enum TrainingConstants {
-    // Layout constants
-    static let collectionSpacing: CGFloat = 10
-    static let headerHeight: CGFloat = 40
-}
-
-protocol TrainingCoordinatorProtocol: AnyObject {
-    func didSelectTraining(model: TrainingModel)
-}
-
+/// View controller for displaying training items.
 final class TrainingViewController: UIViewController {
+    // MARK: - Properties
+
     var viewModel: TrainingViewModel!
-    weak var coordinator: TrainingCoordinatorProtocol?
+    weak var coordinator: (TrainingCoordinatorProtocol & AnyObject)?
 
     private var collectionView: UICollectionView!
 
+    // MARK: - Life Cycle
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        title = "Training"
+        title = TrainingConstants.title
         setupBackgroundImage()
         setupCollectionView()
     }
+
+    // MARK: - UI Setup
 
     private func setupBackgroundImage() {
         let backgroundImageView = UIImageView(image: .background)
@@ -81,6 +77,8 @@ final class TrainingViewController: UIViewController {
     }
 }
 
+// MARK: - UICollectionViewDataSource
+
 extension TrainingViewController: UICollectionViewDataSource {
     func numberOfSections(in collectionView: UICollectionView) -> Int {
         viewModel.trainingSections.count
@@ -105,7 +103,6 @@ extension TrainingViewController: UICollectionViewDataSource {
         return cell
     }
 
-    // Section header.
     func collectionView(
         _ collectionView: UICollectionView,
         viewForSupplementaryElementOfKind kind: String,
@@ -126,6 +123,8 @@ extension TrainingViewController: UICollectionViewDataSource {
         return UICollectionReusableView()
     }
 }
+
+// MARK: - UICollectionViewDelegate
 
 extension TrainingViewController: UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {

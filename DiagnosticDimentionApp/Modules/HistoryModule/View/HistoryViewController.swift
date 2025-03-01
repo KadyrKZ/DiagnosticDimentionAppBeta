@@ -3,28 +3,26 @@
 
 import UIKit
 
-/// HistoryConstants
-enum HistoryConstants {
-    static let clearButtonTitle = "Clear"
-    static let probabilityPrefix = "Probability: "
-    static let diagnosisPrefix = "Diagnosis: "
-}
-
+/// A view controller that displays the history of diagnostic records.
 final class HistoryViewController: UITableViewController {
     weak var coordinator: HistoryCoordinator?
     var viewModel: HistoryViewModel!
 
+    // MARK: - UI Elements
+
     private lazy var clearButton: UIButton = {
         let button = UIButton(type: .system)
         let symbolConfig = UIImage.SymbolConfiguration(pointSize: 20, weight: .regular)
-        let gearImage = UIImage(systemName: "trash", withConfiguration: symbolConfig)?
+        let trashImage = UIImage(systemName: "trash", withConfiguration: symbolConfig)?
             .withRenderingMode(.alwaysTemplate)
-        button.setImage(gearImage, for: .normal)
+        button.setImage(trashImage, for: .normal)
         button.tintColor = UIColor.tabbarIcon
         button.translatesAutoresizingMaskIntoConstraints = false
         button.addTarget(self, action: #selector(clearHistoryTapped), for: .touchUpInside)
         return button
     }()
+
+    // MARK: - Life Cycle
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -45,10 +43,14 @@ final class HistoryViewController: UITableViewController {
         tableView.reloadData()
     }
 
+    // MARK: - Actions
+
     @objc private func clearHistoryTapped() {
         viewModel.clearRecords()
         tableView.reloadData()
     }
+
+    // MARK: - TableView Data Source
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         viewModel.records.count

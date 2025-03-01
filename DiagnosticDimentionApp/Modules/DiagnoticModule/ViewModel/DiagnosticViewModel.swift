@@ -4,16 +4,14 @@
 import Foundation
 import UIKit
 
-/// DiagnosticConstants
-enum DiagnosticConstants {
-    static let startingUploadMessage = "Starting video upload: "
-    static let uploadSuccessMessage = "Video upload successful. Server response: "
-    static let uploadErrorMessage = "Video upload error: "
-}
-
+/// View model for diagnostic operations.
 final class DiagnosticViewModel {
+    // MARK: - Callbacks
+
     var onUploadSuccess: (([String: Any]) -> Void)?
     var onUploadFailure: ((Error) -> Void)?
+
+    // MARK: - Methods
 
     func uploadVideo(videoURL: URL, serverURL: String) {
         print(DiagnosticConstants.startingUploadMessage + videoURL.absoluteString)

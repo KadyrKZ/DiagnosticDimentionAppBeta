@@ -4,13 +4,10 @@
 import AVKit
 import UIKit
 
-/// TrainingDetailConstants
-enum TrainingDetailConstants {
-    static let videoHeight: CGFloat = 300
-    static let sidePadding: CGFloat = 16
-}
-
+/// View controller for displaying training details.
 final class TrainingDetailViewController: UIViewController {
+    // MARK: - Properties
+
     private let trainingModel: TrainingModel
     private var playerViewController: AVPlayerViewController!
 
@@ -23,6 +20,8 @@ final class TrainingDetailViewController: UIViewController {
         return label
     }()
 
+    // MARK: - Initialization
+
     init(trainingModel: TrainingModel) {
         self.trainingModel = trainingModel
         super.init(nibName: nil, bundle: nil)
@@ -34,6 +33,8 @@ final class TrainingDetailViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
 
+    // MARK: - Life Cycle
+
     override func viewDidLoad() {
         super.viewDidLoad()
         view.backgroundColor = .button
@@ -41,14 +42,20 @@ final class TrainingDetailViewController: UIViewController {
         setupDescriptionLabel()
     }
 
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        playerViewController.player?.play()
+    }
+
+    // MARK: - UI Setup
+
     private func setupVideoPlayer() {
         playerViewController = AVPlayerViewController()
         if let videoURL = Bundle.main.url(forResource: trainingModel.videoName, withExtension: "mp4") {
             let player = AVPlayer(url: videoURL)
             playerViewController.player = player
-        } else {
-            print("Video file not found: \(trainingModel.videoName).mp4")
         }
+
         addChild(playerViewController)
         view.addSubview(playerViewController.view)
         playerViewController.view.translatesAutoresizingMaskIntoConstraints = false
@@ -81,10 +88,5 @@ final class TrainingDetailViewController: UIViewController {
                 constant: -20
             )
         ])
-    }
-
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        playerViewController.player?.play()
     }
 }
